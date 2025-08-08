@@ -77,7 +77,7 @@ class BirthDayViewController: UIViewController {
         view.endEditing(true)
         
         guard let year = yearTextField.text, let month = monthTextField.text, let day = dayTextField.text else {
-            print("")
+            print("빈칸")
             return
         }
         do {
@@ -91,7 +91,7 @@ class BirthDayViewController: UIViewController {
             resultLabel.text = "1일부터 31일 중에 하나를 입력해주세요"
         } catch .isBlank {
             resultLabel.text = "입력이 완료되지 않았습니다"
-        } catch .notInt {
+        } catch DateFormatChecker.notInt {
             resultLabel.text = "숫자를 입력해주세요"
         } catch {
             resultLabel.text = "다른 에러가 발생했습니다"

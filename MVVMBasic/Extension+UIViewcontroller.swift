@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 extension UIViewController {
-    
+//    
 //    func BMIcalculator<T: Numeric>(weight: T, height: T) -> Int {
 //        
 //        let result = weight / ((height * 0.01) * (height * 0.01))
