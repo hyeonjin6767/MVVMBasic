@@ -7,13 +7,16 @@
 
 import UIKit
 
-enum AgeCheck: Error {
-    case overInt
-    case isBlank
-    case isString
-}
+//enum AgeCheck: Error {
+//    case overInt
+//    case isBlank
+//    case isString
+//}
 
 class AgeViewController: UIViewController {
+    
+    let viewModel = AgeViewModel()
+    
     let textField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "나이를 입력해주세요"
@@ -40,50 +43,58 @@ class AgeViewController: UIViewController {
         configureLayout()
         
         resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
+        
+        
+        viewModel.errorCheckText = {
+            self.label.text = self.viewModel.outputText
+        }
+        
     }
     
     @objc func resultButtonTapped() {
         view.endEditing(true)
+                
+        viewModel.inputField = textField.text!
         
-        guard let input = textField.text else {
-            print("공백입니다")
-            return
-        }
-        do {
-            let _ = try genericExercise(check: input)
-            label.text = "검색이 가능합니다"
-        } catch AgeCheck.overInt {
-            label.text = "나이는 0세에서 100세 사이입니다"
-        } catch AgeCheck.isBlank {
-            label.text = "빈칸입니다"
-        } catch AgeCheck.isString {
-            label.text = "숫자가 아닙니다"
-        } catch {
-            label.text = "다른 문제가 발생했습니다"
-        }
+//        guard let input = textField.text else {
+//            print("공백입니다")
+//            return
+//        }
+//        do {
+//            let _ = try genericExercise(check: input)
+//            label.text = "검색이 가능합니다"
+//        } catch AgeCheck.overInt {
+//            label.text = "나이는 0세에서 100세 사이입니다"
+//        } catch AgeCheck.isBlank {
+//            label.text = "빈칸입니다"
+//        } catch AgeCheck.isString {
+//            label.text = "숫자가 아닙니다"
+//        } catch {
+//            label.text = "다른 문제가 발생했습니다"
+//        }
     }
     
-    func genericExercise(check: String) throws -> Bool {
-        
-        //옵셔널 문제로 체크하는 순서 주의!
-        guard !(check.isEmpty) else {
-            print("빈칸입니다.")
-            throw AgeCheck.isBlank
-        }
-        guard Int(check) != nil else {
-            print("숫자가 아닙니다.")
-            throw AgeCheck.isString
-        }
-        guard Int(check)! > 0 else {
-            print("나이는 0 혹은 마이너스가 될 수 없습니다.")
-            throw AgeCheck.overInt
-        }
-        guard Int(check)! <= 100 else {
-            print("나이는 100을 넘을 수없습니다.")
-            throw AgeCheck.overInt
-        }
-        return true
-    }
+//    func genericExercise(check: String) throws -> Bool {
+//    
+//        //옵셔널 문제로 체크하는 순서 주의!
+//        guard !(check.isEmpty) else {
+//            print("빈칸입니다.")
+//            throw AgeCheck.isBlank
+//        }
+//        guard Int(check) != nil else {
+//            print("숫자가 아닙니다.")
+//            throw AgeCheck.isString
+//        }
+//        guard Int(check)! > 0 else {
+//            print("나이는 0 혹은 마이너스가 될 수 없습니다.")
+//            throw AgeCheck.overInt
+//        }
+//        guard Int(check)! <= 100 else {
+//            print("나이는 100을 넘을 수 없습니다.")
+//            throw AgeCheck.overInt
+//        }
+//        return true
+//    }
 
     func configureHierarchy() {
         view.addSubview(textField)
