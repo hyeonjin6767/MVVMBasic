@@ -9,16 +9,16 @@ import Foundation
 import UIKit
 
 extension UIViewController {
-//    
-//    func BMIcalculator<T: Numeric>(weight: T, height: T) -> Int {
-//        
-//        let result = weight / ((height * 0.01) * (height * 0.01))
-//        return Int(result)
-//    }
+    
+    func BMIcalculator<T: BinaryFloatingPoint>(weight: T, height: T) -> Int {
+        
+        let result = weight / ((height * 0.01) * (height * 0.01))
+        return Int(result)
+    }
     
     func showAlert(message: String) {
         let alert = UIAlertController(title: "문제 발생", message: message, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let cancel = UIAlertAction(title: "확인", style: .cancel)
         alert.addAction(cancel)
         present(alert, animated: true)
     }

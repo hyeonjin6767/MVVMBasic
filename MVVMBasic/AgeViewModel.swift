@@ -14,7 +14,7 @@ enum AgeCheck: Error {
 }
 
 class AgeViewModel {
-    
+    //신호 전달 받음
     var inputField: String? = ""  {
         
         didSet {
@@ -22,18 +22,19 @@ class AgeViewModel {
             print(oldValue)
             print(inputField)
             resultErrorCheck()
-
         }
     }
     
     var errorCheckText: (() -> Void)?
     
+    
+    //최종 데이터 보내주기
     var outputText = "" {
         didSet {
             print("outputText")
             print(oldValue)
             print(outputText)
-            errorCheckText?()
+            errorCheckText?() //대기하고 있던 클로저를 데이터 변화가 감지 됐으니 실행시켜
         }
     }
     

@@ -7,14 +7,17 @@
 
 import UIKit
 
-enum BMIConditionError: Error {
-    case isBlank
-    case notInt
-    case heightBoundary
-    case weightBoundary
-}
+//enum BMIConditionError: Error {
+//    case isBlank
+//    case notInt
+//    case heightBoundary
+//    case weightBoundary
+//}
 
 class BMIViewController: UIViewController {
+    
+    let viewModel = BMIViewModel()
+    
     let heightTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "키를 입력해주세요"
@@ -38,6 +41,7 @@ class BMIViewController: UIViewController {
         let label = UILabel()
         //label.text = "여기에 결과를 보여주세요"
         label.textAlignment = .center
+        label.numberOfLines = 2
         return label
     }()
     
@@ -48,60 +52,78 @@ class BMIViewController: UIViewController {
         
         resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
         
+        viewModel.bmiClosure = {
+            self.view.endEditing(true)
+            self.resultLabel.text = self.viewModel.outputText
+            if self.viewModel.outputText == "다른 에러가 발생했습니다" {
+                self.showAlert2(message: self.viewModel.outputText)
+            }
+        }
+    }
+    
+    func showAlert2(message: String) {
+        let alert = UIAlertController(title: "문제 발생", message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "확인", style: .cancel)
+        alert.addAction(cancel)
+        present(alert, animated: true)
     }
     
     @objc func resultButtonTapped() {
-        view.endEditing(true)
-    
-        guard let heightInput = heightTextField.text , let weightInput = weightTextField.text else {
-            print("공백입니다")
-            return
-        }
-        do {
-            let _ = try boundaryCheck(inputHeight: heightInput, inputWeight: weightInput)
-            resultLabel.text = "BMI계산이 가능합니다" // \(BMIcalculator(weight: Double(weightInput)!, height: Double(heightInput)!))"
-        } catch .heightBoundary {
-            resultLabel.text = "키는 50cm에서 200cm사이 입니다"
-        } catch .weightBoundary {
-            resultLabel.text = "몸무게가 10kg에서 300kg 사이가 아닙니다"
-        } catch .isBlank {
-            resultLabel.text = "입력이 완료되지 않았습니다"
-        } catch .notInt {
-            resultLabel.text = "숫자가 아닙니다"
-        } catch {
-            let message = "다른 에러가 발생했습니다"
-            showAlert(message: message)
-        }
-    }
-    
-    func boundaryCheck(inputHeight: String, inputWeight: String) throws(BMIConditionError) -> Bool {
         
-        guard !(inputHeight.isEmpty) else {
-            print("키가 입력되지 않았습니다")
-            throw .isBlank
-        }
-        guard !(inputWeight.isEmpty) else {
-            print("몸무게가 입력되지 않았습니다")
-            throw .isBlank
-        }
-        guard Int(inputHeight) != nil else {
-            print("키가 숫자가 아닙니다")
-            throw .notInt
-        }
-        guard Int(inputWeight) != nil else {
-            print("몸무게가 숫자가 아닙니다")
-            throw .notInt
-        }
-        guard Int(inputHeight)! >= 50,  Int(inputHeight)! <= 200 else {
-            print("키가 50cm에서 200cm사이가 아닙니다")
-            throw .heightBoundary
-        }
-        guard Int(inputWeight)! >= 1, Int(inputWeight)! <= 100 else {
-            print("몸무게가 10kg에서 300kg 사이가 아닙니다")
-            throw .weightBoundary
-        }
-        return true
+        viewModel.inputHeight = heightTextField.text
+        viewModel.inputWeight = weightTextField.text
+        
+//        view.endEditing(true)
+//    
+//        guard let heightInput = heightTextField.text , let weightInput = weightTextField.text else {
+//            print("공백입니다")
+//            return
+//        }
+//        do {
+//            let _ = try boundaryCheck(inputHeight: heightInput, inputWeight: weightInput)
+//            resultLabel.text = "BMI계산이 가능합니다\n BMI결과 : \(BMIcalculator(weight: Double(weightInput)!, height: Double(heightInput)!))"
+//        } catch .heightBoundary {
+//            resultLabel.text = "키는 50cm에서 200cm사이 입니다"
+//        } catch .weightBoundary {
+//            resultLabel.text = "몸무게가 10kg에서 300kg 사이가 아닙니다"
+//        } catch .isBlank {
+//            resultLabel.text = "입력이 완료되지 않았습니다"
+//        } catch .notInt {
+//            resultLabel.text = "숫자가 아닙니다"
+//        } catch {
+//            let message = "다른 에러가 발생했습니다"
+//            showAlert(message: message)
+//        }
     }
+    
+//    func boundaryCheck(inputHeight: String, inputWeight: String) throws(BMIConditionError) -> Bool {
+//        
+//        guard !(inputHeight.isEmpty) else {
+//            print("키가 입력되지 않았습니다")
+//            throw .isBlank
+//        }
+//        guard !(inputWeight.isEmpty) else {
+//            print("몸무게가 입력되지 않았습니다")
+//            throw .isBlank
+//        }
+//        guard Int(inputHeight) != nil else {
+//            print("키가 숫자가 아닙니다")
+//            throw .notInt
+//        }
+//        guard Int(inputWeight) != nil else {
+//            print("몸무게가 숫자가 아닙니다")
+//            throw .notInt
+//        }
+//        guard Int(inputHeight)! >= 50,  Int(inputHeight)! <= 200 else {
+//            print("키가 50cm에서 200cm사이가 아닙니다")
+//            throw .heightBoundary
+//        }
+//        guard Int(inputWeight)! >= 1, Int(inputWeight)! <= 100 else {
+//            print("몸무게가 10kg에서 300kg 사이가 아닙니다")
+//            throw .weightBoundary
+//        }
+//        return true
+//    }
     
     func configureHierarchy() {
         view.addSubview(heightTextField)

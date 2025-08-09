@@ -66,6 +66,10 @@ class WordCounterViewController: UIViewController {
         let count = textView.text.count
         countLabel.text = "현재까지 \(count)글자 작성중"
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }
  
 extension WordCounterViewController: UITextViewDelegate {

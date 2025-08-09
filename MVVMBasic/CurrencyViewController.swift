@@ -100,4 +100,8 @@ class CurrencyViewController: UIViewController {
         let convertedAmount = amount / exchangeRate
         resultLabel.text = String(format: "%.2f USD (약 $%.2f)", convertedAmount, convertedAmount)
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }

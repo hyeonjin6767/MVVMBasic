@@ -46,16 +46,19 @@ class AgeViewController: UIViewController {
         
         
         viewModel.errorCheckText = {
+            
+            self.view.endEditing(true)
             self.label.text = self.viewModel.outputText
         }
         
     }
     
     @objc func resultButtonTapped() {
-        view.endEditing(true)
                 
-        viewModel.inputField = textField.text!
+        //데이터 변화 신호 쏘기
+        viewModel.inputField = textField.text
         
+        //view.endEditing(true)
 //        guard let input = textField.text else {
 //            print("공백입니다")
 //            return
