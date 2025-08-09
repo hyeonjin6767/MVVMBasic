@@ -50,7 +50,6 @@ class AgeViewController: UIViewController {
             self.view.endEditing(true)
             self.label.text = self.viewModel.outputText
         }
-        
     }
     
     @objc func resultButtonTapped() {

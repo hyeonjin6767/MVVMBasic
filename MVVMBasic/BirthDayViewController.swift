@@ -8,16 +8,10 @@
 import UIKit
 import SnapKit
 
-enum DateFormatChecker: Error{
-    case yearBoundary
-    case monthBoundary
-    case dayBoundary
-    case isBlank
-    case notInt
-}
-
-
 class BirthDayViewController: UIViewController {
+    
+    let viewModel = BirthdayViewModel()
+    
     let yearTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "년도를 입력해주세요"
@@ -71,72 +65,19 @@ class BirthDayViewController: UIViewController {
         configureLayout()
         
         resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
+        
+        viewModel.birthdayClosure = {
+            self.view.endEditing(true)
+            self.resultLabel.text = self.viewModel.outputText
+        }
     }
     
     @objc func resultButtonTapped() {
-        view.endEditing(true)
         
-        guard let year = yearTextField.text, let month = monthTextField.text, let day = dayTextField.text else {
-            print("빈칸")
-            return
-        }
-        do {
-            let _ = try dateChecker(inputYear: year, inputMonth: month, inputDay: day)
-            resultLabel.text = Birthday(year: Int(year)!, month: Int(month)!, day: Int(day)!)
-        } catch .yearBoundary {
-            resultLabel.text = "2000년 부터 2025년 중에 하나를 입력해주세요"
-        } catch .monthBoundary {
-            resultLabel.text = "1월부터 12월 중에 하나를 입력해주세요"
-        } catch .dayBoundary {
-            resultLabel.text = "1일부터 31일 중에 하나를 입력해주세요"
-        } catch .isBlank {
-            resultLabel.text = "입력이 완료되지 않았습니다"
-        } catch DateFormatChecker.notInt {
-            resultLabel.text = "숫자를 입력해주세요"
-        } catch {
-            resultLabel.text = "다른 에러가 발생했습니다"
-        }
+        viewModel.inputYear = yearTextField.text
+        viewModel.inputMonth = monthTextField.text
+        viewModel.inputDay = monthTextField.text
         
-    }
-    func dateChecker(inputYear: String, inputMonth: String, inputDay: String) throws(DateFormatChecker) -> Bool {
-        
-        guard !(inputYear.isEmpty) else {
-            print("년도가 입력되지 않았습니다")
-            throw .isBlank
-        }
-        guard !(inputMonth.isEmpty) else {
-            print("월이 입력되지 않았습니다")
-            throw .isBlank
-        }
-        guard !(inputDay.isEmpty) else {
-            print("일이 입력되지 않았습니다")
-            throw .isBlank
-        }
-        guard Int(inputYear) != nil else {
-            print("년도가 숫자가 아닙니다")
-            throw .notInt
-        }
-        guard Int(inputMonth) != nil else {
-            print("월이 숫자가 아닙니다")
-            throw .notInt
-        }
-        guard Int(inputDay) != nil else {
-            print("일이 숫자가 아닙니다")
-            throw .notInt
-        }
-        guard Int(inputYear)! > 1999, Int(inputYear)! < 2026 else {
-            print("년도는 2000년부터 2025년까지 입니다")
-            throw .yearBoundary
-        }
-        guard Int(inputMonth)! > 0, Int(inputMonth)! < 13 else {
-            print("월은 1월부터 12월까지 입니다")
-            throw .monthBoundary
-        }
-        guard Int(inputDay)! > 0, Int(inputDay)! < 32 else {
-            print("일은 1일부터 31일까지 입니다")
-            throw .dayBoundary
-        }
-        return true
     }
     
     func configureHierarchy() {

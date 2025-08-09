@@ -14,6 +14,7 @@ enum AgeCheck: Error {
 }
 
 class AgeViewModel {
+    
     //신호 전달 받음
     var inputField: String? = ""  {
         
