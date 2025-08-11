@@ -12,6 +12,8 @@ import SnapKit
 class MapViewController: UIViewController {
      
     private let mapView = MKMapView()
+    let munlaeList = RestaurantList.restaurantArray
+    var lastSpotIndex = 0
      
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +44,6 @@ class MapViewController: UIViewController {
         mapView.mapType = .standard
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .none
-        mapView.isZoomEnabled = true
          
         let seoulStationCoordinate = CLLocationCoordinate2D(latitude: 37.5547, longitude: 126.9706)
         let region = MKCoordinateRegion(
@@ -60,6 +61,39 @@ class MapViewController: UIViewController {
         annotation.subtitle = "대한민국 서울특별시"
         mapView.addAnnotation(annotation)
     }
+    
+    func addMunlaeRestaurantAnnotation(category: String) {
+        let annotation = MKPointAnnotation()
+        for i in 0...munlaeList.count - 1 {
+            annotation.coordinate = CLLocationCoordinate2D(latitude: munlaeList[i].latitude, longitude: munlaeList[i].longitude)
+            annotation.title = munlaeList[i].name
+            annotation.subtitle = munlaeList[i].address
+            if category == munlaeList[i].category {
+                print("추가",munlaeList[i].category)
+                mapView.addAnnotation(annotation)
+                //lastSpotIndex = i
+            } else if category != munlaeList[i].category {
+                print("제거",munlaeList[i].category)
+                mapView.removeAnnotation(annotation)
+            }
+            //setupMapView2(index: lastSpotIndex)
+        }
+        mapView.reloadInputViews()
+    }
+//    private func setupMapView2(index: Int) {
+//        mapView.delegate = self
+//        mapView.mapType = .standard
+//        mapView.showsUserLocation = true
+//        mapView.userTrackingMode = .none
+//        
+//        let lastSpot = CLLocationCoordinate2D(latitude: munlaeList[index].latitude, longitude:  munlaeList[index].longitude)
+//        let focus = MKCoordinateRegion(
+//            center: lastSpot,
+//            latitudinalMeters: 2000,
+//            longitudinalMeters: 2000)
+//        mapView.setRegion(focus, animated: true)
+//    }
+    
      
     @objc private func rightBarButtonTapped() {
         let alertController = UIAlertController(
@@ -70,14 +104,17 @@ class MapViewController: UIViewController {
         
         let alert1Action = UIAlertAction(title: "양식", style: .default) { _ in
             print("양식이 선택되었습니다.")
+            self.addMunlaeRestaurantAnnotation(category: "양식")
         }
         
         let alert2Action = UIAlertAction(title: "한식", style: .default) { _ in
             print("한식이 선택되었습니다.")
+            self.addMunlaeRestaurantAnnotation(category: "한식")
         }
         
         let alert3Action = UIAlertAction(title: "전체보기", style: .default) { _ in
             print("전체보기이 선택되었습니다.")
+            self.addMunlaeRestaurantAnnotation(category: "전체보기")
         }
         
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
@@ -94,6 +131,16 @@ class MapViewController: UIViewController {
 }
  
 extension MapViewController: MKMapViewDelegate {
+    
+//    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+//        print(#function)
+//    }
+//    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+//        print(#function)
+//    }
+//    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+//        print(#function)
+//    }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         guard let annotation = view.annotation else { return }
