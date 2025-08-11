@@ -44,18 +44,25 @@ class AgeViewController: UIViewController {
         
         resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
         
+//        viewModel.errorCheckText = {
+//            
+//            self.view.endEditing(true)
+//            self.label.text = self.viewModel.outputText
+//        }
         
-        viewModel.errorCheckText = {
-            
+        viewModel.outputText.bind { _ in
+            print("??")
             self.view.endEditing(true)
-            self.label.text = self.viewModel.outputText
+            self.label.text = self.viewModel.outputText.value
         }
     }
     
     @objc func resultButtonTapped() {
                 
+        viewModel.inputField.value = textField.text!
+        
         //데이터 변화 신호 쏘기
-        viewModel.inputField = textField.text
+//        viewModel.inputField = textField.text
         
         //view.endEditing(true)
 //        guard let input = textField.text else {

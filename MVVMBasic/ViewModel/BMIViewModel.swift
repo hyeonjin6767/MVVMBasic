@@ -16,53 +16,71 @@ enum BMIConditionError: Error {
 
 class BMIViewModel {
     
-    var inputHeight: String? = "" {
-        didSet {
-            print("inputHeight신호 받음")
-            print(oldValue)
-            print(inputHeight)
-            validateError()
+    var inputHeight = Observable(value: "")
+    var inputWeight = Observable(value: "")
+    
+    init() {
+        inputHeight.bind { value in
+            self.validateError()
         }
-    }
-    var inputWeight: String? = "" {
-        didSet {
-            print("inputWeight신호 받음")
-            print(oldValue)
-            print(inputWeight)
-            validateError()
+        inputWeight.bind { value in
+            self.validateError()
         }
     }
     
-    var bmiClosure: (() -> Void)?
+    var outputText = Observable(value: "")
     
-    var outputText: String = "" {
-        didSet {
-            print("validateError에서 outputText의 변화 감지")
-            print(oldValue)
-            print(outputText)
-            bmiClosure?()
-        }
-    }
     
+//    var inputHeight: String? = "" {
+//        didSet {
+//            print("inputHeight신호 받음")
+//            print(oldValue)
+//            print(inputHeight)
+//            validateError()
+//        }
+//    }
+//    var inputWeight: String? = "" {
+//        didSet {
+//            print("inputWeight신호 받음")
+//            print(oldValue)
+//            print(inputWeight)
+//            validateError()
+//        }
+//    }
+//    
+//    var bmiClosure: (() -> Void)?
+//    
+//    var outputText: String = "" {
+//        didSet {
+//            print("validateError에서 outputText의 변화 감지")
+//            print(oldValue)
+//            print(outputText)
+//            bmiClosure?()
+//        }
+//    }
+//    
     private func validateError() {
     
-        guard let height = inputHeight, let weight = inputWeight else {
-            print("공백입니다")
-            return
-        }
+//        guard let height = inputHeight, let weight = inputWeight else {
+//            print("공백입니다")
+//            return
+//        }
+        let height = inputHeight.value
+        let weight = inputWeight.value
+        
         do {
             let _ = try boundaryCheck(inputHeight: height, inputWeight: weight)
-            outputText = "BMI계산이 가능합니다\n BMI결과 : \(BMIcalculator(height: Double(height)!, weight: Double(weight)!))"
+            outputText.value = "BMI계산이 가능합니다\n BMI결과 : \(BMIcalculator(height: Double(height)!, weight: Double(weight)!))"
         } catch .heightBoundary {
-            outputText = "키는 50cm에서 200cm사이 입니다"
+            outputText.value = "키는 50cm에서 200cm사이 입니다"
         } catch .weightBoundary {
-            outputText = "몸무게가 10kg에서 300kg 사이가 아닙니다"
+            outputText.value = "몸무게가 10kg에서 300kg 사이가 아닙니다"
         } catch .isBlank {
-            outputText = "입력이 완료되지 않았습니다"
+            outputText.value = "입력이 완료되지 않았습니다"
         } catch .notInt {
-            outputText = "숫자가 아닙니다"
+            outputText.value = "숫자가 아닙니다"
         } catch {
-            outputText = "다른 에러가 발생했습니다"
+            outputText.value = "다른 에러가 발생했습니다"
             //showAlert(message: message)
         }
     }

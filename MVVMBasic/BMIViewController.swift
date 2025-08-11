@@ -52,11 +52,18 @@ class BMIViewController: UIViewController {
         
         resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
         
-        viewModel.bmiClosure = {
+//        viewModel.bmiClosure = {
+//            self.view.endEditing(true)
+//            self.resultLabel.text = self.viewModel.outputText
+//            if self.viewModel.outputText == "다른 에러가 발생했습니다" {
+//                self.showAlert2(message: self.viewModel.outputText)
+//            }
+//        }
+        viewModel.outputText.bind { _ in
             self.view.endEditing(true)
-            self.resultLabel.text = self.viewModel.outputText
-            if self.viewModel.outputText == "다른 에러가 발생했습니다" {
-                self.showAlert2(message: self.viewModel.outputText)
+            self.resultLabel.text = self.viewModel.outputText.value
+            if self.viewModel.outputText.value == "다른 에러가 발생했습니다" {
+                self.showAlert2(message: self.viewModel.outputText.value)
             }
         }
     }
@@ -70,8 +77,8 @@ class BMIViewController: UIViewController {
     
     @objc func resultButtonTapped() {
         
-        viewModel.inputHeight = heightTextField.text
-        viewModel.inputWeight = weightTextField.text
+        viewModel.inputHeight.value = heightTextField.text!
+        viewModel.inputWeight.value = weightTextField.text!
         
 //        view.endEditing(true)
 //    

@@ -54,8 +54,12 @@ class CurrencyViewController: UIViewController {
         setupConstraints()
         setupActions()
         
-        viewModel.currencyClosure = {
-            self.resultLabel.text = self.viewModel.outputDollar
+//        viewModel.currencyClosure = {
+//            self.resultLabel.text = self.viewModel.outputDollar
+//        }
+        viewModel.outputDollar.bind { _ in
+            self.resultLabel.text = self.viewModel.outputDollar.value
+
         }
     }
      
@@ -97,7 +101,7 @@ class CurrencyViewController: UIViewController {
      
     @objc private func convertButtonTapped() {
         
-        viewModel.inputMoney = amountTextField.text
+        viewModel.inputMoney.value = amountTextField.text!
         
     }
     

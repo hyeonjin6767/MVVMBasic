@@ -37,8 +37,12 @@ class WordCounterViewController: UIViewController {
         setupConstraints()
         setupTextView()
         
-        viewModel.counterClosure = {
-            self.countLabel.text = self.viewModel.outputText
+//        viewModel.counterClosure = {
+//            self.countLabel.text = self.viewModel.outputText
+//        }
+        viewModel.outputText.bind { _ in
+            self.countLabel.text = self.viewModel.outputText.value
+
         }
     }
      
@@ -72,7 +76,7 @@ class WordCounterViewController: UIViewController {
 //        let count = textView.text.count
 //        countLabel.text = "현재까지 \(count)글자 작성중"
         
-        viewModel.inputWord = textView.text
+        viewModel.inputWord.value = textView.text
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -66,17 +66,22 @@ class BirthDayViewController: UIViewController {
         
         resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
         
-        viewModel.birthdayClosure = {
+//        viewModel.birthdayClosure = {
+//            self.view.endEditing(true)
+//            self.resultLabel.text = self.viewModel.outputText
+//        }
+        
+        viewModel.outputText.bind { _ in
             self.view.endEditing(true)
-            self.resultLabel.text = self.viewModel.outputText
+            self.resultLabel.text = self.viewModel.outputText.value
         }
     }
     
     @objc func resultButtonTapped() {
         
-        viewModel.inputYear = yearTextField.text
-        viewModel.inputMonth = monthTextField.text
-        viewModel.inputDay = monthTextField.text
+        viewModel.inputYear.value = yearTextField.text!
+        viewModel.inputMonth.value = monthTextField.text!
+        viewModel.inputDay.value = monthTextField.text!
         
     }
     
